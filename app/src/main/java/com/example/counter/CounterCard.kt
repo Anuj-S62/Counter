@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -19,8 +20,11 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
+import androidx.compose.material3.Button
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -41,6 +45,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 //import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -61,35 +66,68 @@ fun CounterCoard(counter:Counter,onEvent:(CounterEvents)->Unit,fontFamily:androi
             .animateContentSize()
             .clickable { expand = !expand }
         ) {
-            Column(modifier = Modifier.fillMaxWidth()) {
+            Column(modifier = Modifier.fillMaxSize()) {
                 Row(modifier = Modifier
                     .fillMaxWidth()
                    , horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     Column(horizontalAlignment = Alignment.Start, modifier = Modifier
                         .fillMaxHeight()) {
-                        Text(counter.counterName,modifier = Modifier.padding(start = 15.dp,top = 10.dp,),fontFamily = fontFamily, fontSize = 25.sp, fontStyle = FontStyle.Italic)
-                        Text(counter.count.toString(),modifier = Modifier.padding(start = 15.dp,top = 10.dp, bottom = 10.dp),fontFamily = fontFamily, fontSize = 35.sp,fontStyle = FontStyle.Italic, color = MaterialTheme.colorScheme.primary)
+                        Text(counter.counterName,modifier = Modifier
+                            .padding(start = 15.dp,top = 10.dp,),
+                            overflow = TextOverflow.Ellipsis,
+                            maxLines = 1,
+                            fontFamily = fontFamily,
+                            fontSize = 25.sp,
+                            fontStyle = FontStyle.Italic
+                        )
+                        Text(counter.count.toString(),modifier = Modifier
+                            .padding(start = 15.dp,top = 10.dp, bottom = 10.dp),
+                            overflow = TextOverflow.Ellipsis,
+                            maxLines = 1,
+                            fontFamily = fontFamily,
+                            fontSize = 35.sp,
+                            fontStyle = FontStyle.Italic,
+                            color = MaterialTheme.colorScheme.primary
+                        )
                     }
                     Column(modifier = Modifier
                         .fillMaxHeight()
-                        .padding(end = 2.dp), verticalArrangement = Arrangement.SpaceAround) {
-                        IconButton(onClick = {
-                            onEvent(CounterEvents.Increment(counter))
-                        },modifier = Modifier.size(70.dp)
-                        ) {
-                            Icon(modifier = Modifier.size(40.dp),imageVector = Icons.Default.Add, contentDescription = "Increase Count")
-
-                        }
-                        IconButton(onClick = {onEvent(CounterEvents.Decrement(counter))},modifier = Modifier.size(70.dp)) {
-                            Icon(modifier = Modifier.size(40.dp),imageVector = Icons.Default.KeyboardArrowLeft, contentDescription = "")
+//                        .background(color = Color.White)
+                        .padding(end = 2.dp), verticalArrangement = Arrangement.SpaceBetween,)
+                    {
+                        Box(modifier = Modifier
+                            .size(132.dp)
+                            .padding(10.dp)
+                            .clip(CircleShape)
+                            .clickable {onEvent(CounterEvents.Increment(counter))}
+                            .background(color = Color.White))
+                        {
+//
+                            Box(modifier = Modifier.size(125.dp)
+                                .padding(4.dp)
+                                .clip(CircleShape)
+                                .background(color = Color.Black),
+                                contentAlignment = Alignment.Center)
+                            {
+                                Text("+"+counter.inc.toString(),
+                                    fontSize = 20.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    fontFamily = fontFamily,
+                                    overflow = TextOverflow.Ellipsis,
+                                    maxLines = 1,
+                                )
+                            }
                         }
                     }
                 }
-                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                     if(expand){
-                        IconButton(onClick = {onEvent(CounterEvents.DeleteCounter(counter))}) {
+                        IconButton(onClick = {onEvent(CounterEvents.DeleteCounter(counter))},modifier = Modifier.padding(start = 10.dp)) {
                             Icon(imageVector = Icons.Default.Delete, contentDescription = "")
+                        }
+                        IconButton(onClick = {onEvent(CounterEvents.Decrement(counter))},modifier = Modifier.size(70.dp)) {
+                            Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "")
                         }
                     }
                 }

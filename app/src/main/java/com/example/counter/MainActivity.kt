@@ -51,13 +51,6 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             CounterTheme {
-                // A surface container using the 'background' color from the theme
-//                Surface(
-//                    modifier = Modifier.fillMaxSize(),
-//                    color = MaterialTheme.colorScheme.background
-//                ) {
-//                    Greeting("Android")
-//                }
                 val state by viewModel.state.collectAsState()
                 CounterScreen(state = state, onEvent = viewModel::onEvent,fontFamily)
             }

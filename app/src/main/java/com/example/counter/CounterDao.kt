@@ -14,6 +14,6 @@ interface CounterDao {
     @Delete
     suspend fun deleteCounter(counter: Counter)
 
-    @Query("SELECT * FROM counter")
+    @Query("SELECT * FROM counter order by id DESC")
     fun getAllCounter() : Flow<List<Counter>>
 }

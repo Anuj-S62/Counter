@@ -2,6 +2,7 @@ package com.example.counter
 
 import android.annotation.SuppressLint
 import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
@@ -41,9 +42,17 @@ fun CounterScreen(
     onEvent:(CounterEvents)->Unit,
     fontFamily:FontFamily = FontFamily()
 ){
+    Box(modifier = Modifier.fillMaxSize().background(color = Color.DarkGray)) {
+
+    }
+
     Scaffold(
+
         floatingActionButton = {
-            FloatingActionButton(onClick = {
+            FloatingActionButton(
+                containerColor = Color(247, 170, 111),
+                contentColor = Color(143, 98, 64),
+                onClick = {
                 onEvent(CounterEvents.ShowDialog)
             }) {
                 Icon(
@@ -51,7 +60,9 @@ fun CounterScreen(
                     contentDescription = "Add counter"
                 )
             }
-        }
+        },
+        containerColor = Color(20,20,20),
+        contentColor = Color.White
     ) {
         if(state.isAdding) {
             AddCounterDialog(state = state, onEvent = onEvent)
@@ -65,7 +76,7 @@ fun CounterScreen(
                     text = buildAnnotatedString {
                         withStyle(
                             style = SpanStyle(
-                                color = MaterialTheme.colorScheme.primary,
+                                color = Color(247, 170, 111),
                                 fontSize = 35.sp
                             )
                         ) {
@@ -76,7 +87,7 @@ fun CounterScreen(
                     fontSize = 30.sp,
                     fontFamily = fontFamily,
                     fontWeight = FontWeight.Bold,
-                    fontStyle = FontStyle.Italic,
+//                    fontStyle = FontStyle.Italic,
                 )
             }
             items(state.counters){counter->

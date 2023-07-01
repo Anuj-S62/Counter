@@ -1,6 +1,7 @@
 package com.example.counter
 
 import android.util.Log
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,7 +32,10 @@ class CounterViewModel(private val dao:CounterDao):ViewModel() {
                     counterName = event.Counter.counterName,
                     count = cnt.toString(),
                     inc = event.Counter.inc,
-                    dec = event.Counter.dec
+                    dec = event.Counter.dec,
+                    red = event.Counter.red,
+                    green = event.Counter.green,
+                    blue = event.Counter.blue
                 )
                 viewModelScope.launch {
                     dao.upsertCounter(
@@ -60,7 +64,10 @@ class CounterViewModel(private val dao:CounterDao):ViewModel() {
                     counterName = event.Counter.counterName,
                     count = cnt.toString(),
                     inc = event.Counter.inc,
-                    dec = event.Counter.dec
+                    dec = event.Counter.dec,
+                    red = event.Counter.red,
+                    green = event.Counter.green,
+                    blue = event.Counter.blue
                 )
                 viewModelScope.launch {
                     dao.upsertCounter(
@@ -73,6 +80,10 @@ class CounterViewModel(private val dao:CounterDao):ViewModel() {
                 var count = state.value.count
                 var inc = state.value.inc
                 var dec = state.value.dec
+//                var col = state.value.col
+                var red = state.value.red
+                var green = state.value.green
+                var blue = state.value.blue
                 if(counterName.isBlank()){
                     return
                 }
@@ -89,7 +100,11 @@ class CounterViewModel(private val dao:CounterDao):ViewModel() {
                     counterName = counterName,
                     count = count,
                     inc = inc,
-                    dec = dec
+                    dec = dec,
+//                    col = col
+                    red = red,
+                    green = green,
+                    blue = blue
                 )
                 Log.d("cName",counterName)
                 Log.d("count",count.toString())
@@ -106,8 +121,10 @@ class CounterViewModel(private val dao:CounterDao):ViewModel() {
                         count = "",
                         counterName = "",
                         inc = "",
-                        dec = ""
-
+                        dec = "",
+                        red = 255,
+                        green = 255,
+                        blue =255
                     )
 
                 }
@@ -147,6 +164,16 @@ class CounterViewModel(private val dao:CounterDao):ViewModel() {
                 _state.update {
                     it.copy(
                         count = event.count
+                    )
+                }
+            }
+
+            is CounterEvents.SelectColor -> {
+                _state.update {
+                    it.copy(
+                        red = event.r,
+                        green = event.g,
+                        blue = event.b
                     )
                 }
             }

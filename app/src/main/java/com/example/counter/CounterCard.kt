@@ -2,6 +2,7 @@ package com.example.counter
 
 import android.annotation.SuppressLint
 import android.graphics.fonts.FontFamily
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
@@ -57,7 +58,25 @@ fun CounterCoard(counter:Counter,onEvent:(CounterEvents)->Unit,fontFamily:androi
             mutableStateOf(false)
         }
 
-
+        var cnt = counter.count
+        var i = 0
+        var ans:String = ""
+        while(i<cnt.length){
+            if(cnt[i]=='.') break
+            ans += cnt[i]
+            i++
+        }
+        var afterPoint:String = ""
+        i++
+        while(i<cnt.length){
+            afterPoint+=cnt[i]
+            i++
+        }
+//        var temp:Int = afterPoint.toInt()
+        if(afterPoint.length>0 && afterPoint!="0"){
+            ans += '.'
+            ans += afterPoint[0]
+        }
         Box(modifier = Modifier
             .fillMaxWidth()
             .padding(10.dp)
@@ -79,16 +98,16 @@ fun CounterCoard(counter:Counter,onEvent:(CounterEvents)->Unit,fontFamily:androi
                             maxLines = 1,
                             fontFamily = fontFamily,
                             fontSize = 25.sp,
-                            fontStyle = FontStyle.Italic
+//                            fontStyle = FontStyle.Italic
                         )
-                        Text(counter.count.toString(),modifier = Modifier
+                        Text(ans,modifier = Modifier
                             .padding(start = 15.dp,top = 10.dp, bottom = 10.dp),
                             overflow = TextOverflow.Ellipsis,
                             maxLines = 1,
                             fontFamily = fontFamily,
                             fontSize = 35.sp,
-                            fontStyle = FontStyle.Italic,
-                            color = MaterialTheme.colorScheme.primary
+//                            fontStyle = FontStyle.Italic,
+                            color = Color(counter.red,counter.green,counter.blue)
                         )
                     }
                     Column(modifier = Modifier
@@ -99,23 +118,24 @@ fun CounterCoard(counter:Counter,onEvent:(CounterEvents)->Unit,fontFamily:androi
                         Box(modifier = Modifier
                             .size(132.dp)
                             .padding(10.dp)
-                            .clip(CircleShape)
+                            .clip(RoundedCornerShape(20.dp))
                             .clickable {onEvent(CounterEvents.Increment(counter))}
-                            .background(color = Color.White))
+                            .background(color = Color(counter.red,counter.green,counter.blue)))
                         {
 //
                             Box(modifier = Modifier.size(125.dp)
                                 .padding(4.dp)
-                                .clip(CircleShape)
+                                .clip(RoundedCornerShape(20.dp))
                                 .background(color = Color.Black),
                                 contentAlignment = Alignment.Center)
                             {
                                 Text("+"+counter.inc.toString(),
-                                    fontSize = 20.sp,
+                                    fontSize = 25.sp,
                                     fontWeight = FontWeight.Bold,
                                     fontFamily = fontFamily,
                                     overflow = TextOverflow.Ellipsis,
                                     maxLines = 1,
+                                    color = Color(counter.red,counter.green,counter.blue)
                                 )
                             }
                         }
@@ -123,7 +143,9 @@ fun CounterCoard(counter:Counter,onEvent:(CounterEvents)->Unit,fontFamily:androi
                 }
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                     if(expand){
-                        IconButton(onClick = {onEvent(CounterEvents.DeleteCounter(counter))},modifier = Modifier.padding(start = 10.dp)) {
+                        IconButton(onClick = {
+                            expand = !expand
+                            onEvent(CounterEvents.DeleteCounter(counter))},modifier = Modifier.padding(start = 10.dp)) {
                             Icon(imageVector = Icons.Default.Delete, contentDescription = "")
                         }
                         IconButton(onClick = {onEvent(CounterEvents.Decrement(counter))},modifier = Modifier.size(70.dp)) {

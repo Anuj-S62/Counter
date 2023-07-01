@@ -62,7 +62,7 @@ fun AddCounterDialog(
                        )
                    }
                    item {
-
+                        ColorPicker(state = state, onEvent = onEvent)
                    }
                }
         },

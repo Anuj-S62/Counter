@@ -153,11 +153,18 @@ fun CounterCoard(counter:Counter,onEvent:(CounterEvents)->Unit,fontFamily:androi
                         }
                         IconButton(onClick =
                         {
+//                            Intent(context,AppService::class.java).also {
+//                                it.action = AppService.Actions.STOP.toString()
+//                                context.startService(it)
+//                            }
                             Log.d("adadma","app Service")
                             Intent(context,AppService::class.java).also {
                                 it.action = AppService.Actions.START.toString()
-                                it.putExtra("counterName",counter.counterName)
-                                it.putExtra("count",ans.toString())
+                                it.putExtra("cName",counter.counterName.toString())
+                                it.putExtra("cnt",ans.toString())
+                                it.putExtra("id",counter.id.toString())
+                                it.putExtra("inc",counter.inc.toString())
+                                it.putExtra("dec",counter.dec.toString())
                                 context.startService(it)
                             }
 

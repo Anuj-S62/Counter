@@ -27,15 +27,22 @@ class AppService:Service(){
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+
+        var id = intent?.getStringExtra("id").toString()
+        var cName = intent?.getStringExtra("cName").toString()
+        var cnt = intent?.getStringExtra("cnt").toString()
+        var inc = intent?.getStringExtra("inc").toString()
+        var dec = intent?.getStringExtra("dec").toString()
+
         when(intent?.action){
-            Actions.START.toString() -> start(intent.getStringExtra("counterName").toString(),intent.getStringExtra("count").toString())
+            Actions.START.toString() -> start(cName,cnt,id,inc,dec)
             Actions.STOP.toString() -> stopSelf()
         }
 
         return super.onStartCommand(intent, flags, startId)
     }
 
-    private fun start(title:String,count:String){
+    private fun start(title:String,count:String,id:String,inc:String,dec:String){
         Log.d("title",title)
         Log.d("count",count)
         val intent = Intent(applicationContext, MainActivity:: class.java).apply{
@@ -43,19 +50,38 @@ class AppService:Service(){
         }
         // 3
         val pendingIntent = getActivity(applicationContext, 0, intent, FLAG_IMMUTABLE)
-        val increaseIntent = Intent(applicationContext, MainActivity:: class.java).apply{
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        }
-        val increasePendingIntent = getActivity(applicationContext,1,increaseIntent, FLAG_IMMUTABLE)
+//        val increaseIntent = Intent(applicationContext, IncreaseBroadcastReceiver::class.java).apply{
+//            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+//            putExtra("id",id)
+//            Log.d("sidjsjdisj",id)
+//            putExtra("cnt",count)
+//            putExtra("inc",inc)
+//        }
+//        val increasePendingIntent = sendBroadcast(intent)
+//        val increaseAction:Notification.Action? = Notification.Action(1,"+5",increasePendingIntent)
+
+        val inten = Intent(applicationContext, IncreaseBroadcastReceiver::class.java)
+        inten.action = "com.example.ACTION_INCREMENT_COUNTER"
+
+// Add extra data to the Intent
+        val incrementValue = 10 // Replace with your desired increment value
+        inten.putExtra("id",id)
+
+// Create a PendingIntent using getService()
+        val increasePendingIntent = PendingIntent.getBroadcast(
+            applicationContext,
+            0,
+            inten,
+            FLAG_IMMUTABLE
+        )
         val increaseAction:Notification.Action? = Notification.Action(1,"+5",increasePendingIntent)
 
         val notification: Notification = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             Log.d("noti","Notifi")
             Notification.Builder(applicationContext, "running_channel")
                 .setSmallIcon(R.mipmap.ic_launcher_counter_foreground)
-                .setContentTitle(title)
+                .setContentTitle(title + " " + id)
                 .setContentIntent(pendingIntent)
-                .addAction(increaseAction)
                 .addAction(increaseAction)
                     .setContentText(count)
                     .build()

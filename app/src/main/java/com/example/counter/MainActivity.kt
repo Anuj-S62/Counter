@@ -27,6 +27,9 @@ import com.example.counter.ui.theme.CounterTheme
 import java.util.jar.Manifest
 
 class MainActivity : ComponentActivity() {
+    companion object {
+        lateinit var database : CounterDatabse
+    }
 
     private val db by lazy {
         Room.databaseBuilder(
@@ -46,7 +49,7 @@ class MainActivity : ComponentActivity() {
     )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        database = db
         val fontFamily = FontFamily(
             Font(R.font.notosans_light, FontWeight.Thin),
             Font(R.font.notosans_medium, FontWeight.Medium),

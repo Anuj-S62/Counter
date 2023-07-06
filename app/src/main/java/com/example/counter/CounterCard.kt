@@ -1,6 +1,7 @@
 package com.example.counter
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.graphics.fonts.FontFamily
 import android.util.Log
 import android.widget.Toast
@@ -25,6 +26,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.Button
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -57,6 +59,7 @@ fun CounterCoard(counter:Counter,onEvent:(CounterEvents)->Unit,fontFamily:androi
         var expand by remember {
             mutableStateOf(false)
         }
+    val context = LocalContext.current
 
         var cnt = counter.count
         var i = 0
@@ -145,12 +148,26 @@ fun CounterCoard(counter:Counter,onEvent:(CounterEvents)->Unit,fontFamily:androi
                     if(expand){
                         IconButton(onClick = {
                             expand = !expand
-                            onEvent(CounterEvents.DeleteCounter(counter))},modifier = Modifier.padding(start = 10.dp)) {
+                            onEvent(CounterEvents.DeleteCounter(counter))},modifier = Modifier.size(70.dp)) {
                             Icon(imageVector = Icons.Default.Delete, contentDescription = "")
+                        }
+                        IconButton(onClick =
+                        {
+                            Log.d("adadma","app Service")
+                            Intent(context,AppService::class.java).also {
+                                it.action = AppService.Actions.START.toString()
+                                it.putExtra("counterName",counter.counterName)
+                                it.putExtra("count",ans.toString())
+                                context.startService(it)
+                            }
+
+                        },modifier = Modifier.size(70.dp)) {
+                            Icon(imageVector = Icons.Default.Notifications, contentDescription = "")
                         }
                         IconButton(onClick = {onEvent(CounterEvents.Decrement(counter))},modifier = Modifier.size(70.dp)) {
                             Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "")
                         }
+
                     }
                 }
             }

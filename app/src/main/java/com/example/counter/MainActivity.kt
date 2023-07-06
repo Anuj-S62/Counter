@@ -1,5 +1,7 @@
 package com.example.counter
 
+import android.annotation.SuppressLint
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -16,10 +18,13 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.room.Room
 import com.example.counter.ui.theme.CounterTheme
+import java.util.jar.Manifest
 
 class MainActivity : ComponentActivity() {
 
@@ -48,6 +53,14 @@ class MainActivity : ComponentActivity() {
             Font(R.font.notosans_black, FontWeight.Black),
             Font(R.font.notosans_bold, FontWeight.Bold)
         )
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(android.Manifest.permission.POST_NOTIFICATIONS),
+                0
+            )
+        }
+
 
         setContent {
             CounterTheme {

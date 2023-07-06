@@ -56,7 +56,7 @@ fun ColorPicker(
             .background(color = Color(247, 149, 45))){
             if(idx == 1){
 
-                SelectedColor(red = 247, green = 249, blue = 45)
+                SelectedColor(red = 247, green = 149, blue = 45)
             }
         }
         Box(modifier = Modifier

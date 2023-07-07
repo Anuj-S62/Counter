@@ -29,13 +29,8 @@
         </activity>
         <service android:name=".AppService"/>
         <receiver
-            android:name=".IncreaseBroadcastReceiver"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.example.ACTION_INCREMENT_COUNTER" />
-            </intent-filter>
-        </receiver>
+            android:name=".IncreaseBroadcastReceiver" />
+        <receiver android:name=".DecreaseBroadcastReceiver" />
     </application>
 
 </manifest>

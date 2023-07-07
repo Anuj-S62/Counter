@@ -18,5 +18,8 @@ interface CounterDao {
     fun getAllCounter() : Flow<List<Counter>>
 
     @Query("UPDATE counter SET count = :count WHERE id = :id")
-    suspend fun incrementCounter(count:String,id:Int)
+    suspend fun updateCounter(count:String,id:Int)
+
+    @Query("SELECT * FROM counter WHERE id = :id")
+    fun getCounterById(id:Int) : Counter
 }

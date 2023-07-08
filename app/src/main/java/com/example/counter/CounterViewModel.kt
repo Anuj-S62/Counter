@@ -25,7 +25,7 @@ class CounterViewModel(private val dao:CounterDao):ViewModel() {
         when(event){
 
             is CounterEvents.Decrement -> {
-                var cnt = event.Counter.count.toDouble() - event.Counter.dec.toDouble()
+                val cnt = event.Counter.count.toDouble() - event.Counter.dec.toDouble()
                 val counter = Counter(
                     id = event.Counter.id,
                     counterName = event.Counter.counterName,
@@ -57,7 +57,7 @@ class CounterViewModel(private val dao:CounterDao):ViewModel() {
                 }
             }
             is CounterEvents.Increment -> {
-                var cnt : Double= event.Counter.count.toDouble() + event.Counter.inc.toDouble()
+                val cnt : Double= event.Counter.count.toDouble() + event.Counter.inc.toDouble()
                 val counter = Counter(
                     id = event.Counter.id,
                     counterName = event.Counter.counterName,
@@ -75,14 +75,14 @@ class CounterViewModel(private val dao:CounterDao):ViewModel() {
                 }
             }
             CounterEvents.SaveCounter -> {
-                var counterName = state.value.counterName
+                val counterName = state.value.counterName
                 var count = state.value.count
                 var inc = state.value.inc
                 var dec = state.value.dec
 //                var col = state.value.col
-                var red = state.value.red
-                var green = state.value.green
-                var blue = state.value.blue
+                val red = state.value.red
+                val green = state.value.green
+                val blue = state.value.blue
                 if(counterName.isBlank()){
                     return
                 }
@@ -106,8 +106,8 @@ class CounterViewModel(private val dao:CounterDao):ViewModel() {
                     blue = blue
                 )
                 Log.d("cName",counterName)
-                Log.d("count",count.toString())
-                Log.d("inc",inc.toString())
+                Log.d("count", count)
+                Log.d("inc", inc)
                 Log.d("cName",counterName)
                 viewModelScope.launch {
                     dao.upsertCounter(

@@ -5,8 +5,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -24,11 +22,9 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun ColorPicker(
-    state: CounterState,
-    onEvent: (CounterEvents) -> Unit,
-    modifier: Modifier = Modifier
+    onEvent: (CounterEvents) -> Unit
 ){
-    var array = arrayOf(0,1,2,3,4,5)
+    arrayOf(0,1,2,3,4,5)
     var idx by remember {
         mutableStateOf(0)
     }
@@ -105,7 +101,7 @@ fun ColorPicker(
 
 @Composable
 fun SelectedColor(red:Int,green:Int,blue:Int) {
-    var col = Color(red, green, blue)
+    val col = Color(red, green, blue)
     Box(
         modifier = Modifier
             .size(22.dp)

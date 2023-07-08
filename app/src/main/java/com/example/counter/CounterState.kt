@@ -1,7 +1,5 @@
 package com.example.counter
 
-import androidx.compose.ui.graphics.Color
-
 data class CounterState(
     val counters : List<Counter> = emptyList(),
     val counterName:String = "",

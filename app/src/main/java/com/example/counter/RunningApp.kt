@@ -1,7 +1,6 @@
 package com.example.counter
 
 import android.app.Application
-import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
@@ -14,9 +13,10 @@ class RunningApp : Application(){
             val channel = NotificationChannel(
                 "running_channel",
                 "COUNTER NOTIFICATION",
-                NotificationManager.IMPORTANCE_HIGH
+                NotificationManager.IMPORTANCE_LOW
             )
             val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
             notificationManager.createNotificationChannel(channel)
         }
     }

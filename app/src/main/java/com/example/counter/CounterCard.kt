@@ -1,10 +1,8 @@
 package com.example.counter
 
-import android.annotation.SuppressLint
+//import androidx.compose.ui.text.font.FontFamily
 import android.content.Intent
-import android.graphics.fonts.FontFamily
 import android.util.Log
-import android.widget.Toast
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -12,27 +10,18 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.ExitToApp
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material3.Button
-import androidx.compose.material3.ColorScheme
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -44,12 +33,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-//import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -61,25 +46,9 @@ fun CounterCoard(counter:Counter,onEvent:(CounterEvents)->Unit,fontFamily:androi
         }
     val context = LocalContext.current
 
-        var cnt = counter.count
-        var i = 0
-        var ans:String = ""
-        while(i<cnt.length){
-            if(cnt[i]=='.') break
-            ans += cnt[i]
-            i++
-        }
-        var afterPoint:String = ""
-        i++
-        while(i<cnt.length){
-            afterPoint+=cnt[i]
-            i++
-        }
-//        var temp:Int = afterPoint.toInt()
-        if(afterPoint.length>0 && afterPoint!="0"){
-            ans += '.'
-            ans += afterPoint[0]
-        }
+        val cnt = counter.count
+        val ans = Normalize(cnt)
+
         Box(modifier = Modifier
             .fillMaxWidth()
             .padding(10.dp)
@@ -132,7 +101,7 @@ fun CounterCoard(counter:Counter,onEvent:(CounterEvents)->Unit,fontFamily:androi
                                 .background(color = Color.Black),
                                 contentAlignment = Alignment.Center)
                             {
-                                Text("+"+counter.inc.toString(),
+                                Text("+"+ counter.inc,
                                     fontSize = 25.sp,
                                     fontWeight = FontWeight.Bold,
                                     fontFamily = fontFamily,
@@ -160,11 +129,11 @@ fun CounterCoard(counter:Counter,onEvent:(CounterEvents)->Unit,fontFamily:androi
                             Log.d("adadma","app Service")
                             Intent(context,AppService::class.java).also {
                                 it.action = AppService.Actions.START.toString()
-                                it.putExtra("cName",counter.counterName.toString())
-                                it.putExtra("cnt",ans.toString())
+                                it.putExtra("cName", counter.counterName)
+                                it.putExtra("cnt", ans)
                                 it.putExtra("id",counter.id.toString())
-                                it.putExtra("inc",counter.inc.toString())
-                                it.putExtra("dec",counter.dec.toString())
+                                it.putExtra("inc", counter.inc)
+                                it.putExtra("dec", counter.dec)
                                 context.startService(it)
                             }
 
@@ -182,3 +151,36 @@ fun CounterCoard(counter:Counter,onEvent:(CounterEvents)->Unit,fontFamily:androi
         }
 }
 
+
+fun Normalize(cnt : String): String {
+    var i = 0
+    var ans:String = ""
+    while(i<cnt.length){
+        if(cnt[i]=='.') break
+        ans += cnt[i]
+        i++
+    }
+    var afterPoint:String = ""
+    i++
+    while(i<cnt.length){
+        afterPoint+=cnt[i]
+        i++
+    }
+//        var temp:Int = afterPoint.toInt()
+    if(afterPoint.length>0 && afterPoint!="0"){
+        ans += '.'
+        ans += afterPoint[0]
+        var j = 1
+        var exp : String = ""
+        var flag : Boolean = false
+        while(j<afterPoint.length){
+            if(afterPoint[j]=='E' || flag){
+                flag = true
+                exp += afterPoint[j]
+            }
+            j++
+        }
+        ans += exp
+    }
+    return ans
+}

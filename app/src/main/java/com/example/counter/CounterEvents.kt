@@ -1,7 +1,5 @@
 package com.example.counter
 
-import androidx.compose.ui.graphics.Color
-
 sealed interface CounterEvents{
     object SaveCounter:CounterEvents
     data class SetInc(val inc:String):CounterEvents

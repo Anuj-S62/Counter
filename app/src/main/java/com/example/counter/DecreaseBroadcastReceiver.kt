@@ -1,36 +1,90 @@
 package com.example.counter
 
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import androidx.core.app.NotificationCompat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class DecreaseBroadcastReceiver:BroadcastReceiver() {
     override fun onReceive(p0: Context?, p1: Intent?) {
-        Log.d("hello","hello world")
+
+
+        val id : String? = p1?.getStringExtra("id")
+        val inc : String? = p1?.getStringExtra("inc")
+        val cnt : String? = p1?.getStringExtra("cnt")
+        val title : String?  = p1?.getStringExtra("title")
+        val dec : String? = p1?.getStringExtra("dec")
+        val notificationManager : NotificationManager = p0!!.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+
 
         val scope = CoroutineScope(Dispatchers.IO)
         val database = MainActivity.database
         val counterDao = database.dao
 
-        var id : String? = p1?.getStringExtra("id")
-        var inc : String? = p1?.getStringExtra("dec")
-        var cnt : String? = p1?.getStringExtra("cnt")
-        Log.d("id",id.toString())
-        Log.d("inc",inc.toString())
-        Log.d("cnt",cnt.toString())
 
+        val ans = ((cnt!!.toDouble()) - (dec!!.toDouble())).toString()
 
-
-        var ans = (cnt!!.toDouble()) - (inc!!.toDouble())
-
-        Log.d("ans",ans.toString())
         scope.launch {
-            counterDao.updateCounter(ans.toString(),id!!.toInt())
+            counterDao.updateCounter(ans,id!!.toInt())
         }
+        Log.d("title",title!!)
+        Log.d("ans",ans)
+        Log.d("id",id!!)
+        Log.d("inc",inc!!)
+        Log.d("dec", dec)
+
+
+        val intent = Intent(p0, MainActivity:: class.java).apply{
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        PendingIntent.getActivity(p0, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+        val increaseIntent = Intent(p0, IncreaseBroadcastReceiver::class.java).apply{
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            putExtra("id",id)
+            putExtra("cnt",ans)
+            putExtra("inc",inc)
+            putExtra("dec",dec)
+            putExtra("title",title)
+        }
+        val increasePendingIntent = PendingIntent.getBroadcast(
+            p0,
+            id.toInt(),
+            increaseIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        val increaseAction: NotificationCompat.Action = NotificationCompat.Action(1, "+" + inc,increasePendingIntent)
+//
+//
+        val decreaseIntent = Intent(p0, DecreaseBroadcastReceiver::class.java).apply{
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            putExtra("id",id)
+            putExtra("cnt",ans)
+            putExtra("inc",inc)
+            putExtra("dec",dec)
+            putExtra("title",title)
+        }
+        val decreasePendingIntent = PendingIntent.getBroadcast(
+            p0,
+            id.toInt(),
+            decreaseIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        val updatedNotification: NotificationCompat.Builder =
+            NotificationCompat.Builder(p0, "running_channel")
+                .setSmallIcon(R.mipmap.ic_launcher_counter_foreground)
+                .setContentTitle("$title $id")
+                .addAction(increaseAction)
+                .addAction(R.drawable.ic_launcher_foreground,"-$dec",decreasePendingIntent)
+                .setContentText(Normalize(ans))
+
+        notificationManager.notify(123,updatedNotification.build())
 
     }
 }

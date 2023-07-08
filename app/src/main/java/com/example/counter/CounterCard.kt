@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.Icon
@@ -127,6 +128,7 @@ fun CounterCoard(counter:Counter,onEvent:(CounterEvents)->Unit,fontFamily:androi
 //                                context.startService(it)
 //                            }
                             Log.d("adadma","app Service")
+
                             Intent(context,AppService::class.java).also {
                                 it.action = AppService.Actions.START.toString()
                                 it.putExtra("cName", counter.counterName)
@@ -139,6 +141,27 @@ fun CounterCoard(counter:Counter,onEvent:(CounterEvents)->Unit,fontFamily:androi
 
                         },modifier = Modifier.size(70.dp)) {
                             Icon(imageVector = Icons.Default.Notifications, contentDescription = "")
+                        }
+                        IconButton(onClick =
+                        {
+                            Log.d("adadma","app Service")
+
+                            Intent(context,AppService::class.java).also {
+                                it.action = AppService.Actions.START.toString()
+                                it.putExtra("cName", counter.counterName)
+                                it.putExtra("cnt", ans)
+                                it.putExtra("id",counter.id.toString())
+                                it.putExtra("inc", counter.inc)
+                                it.putExtra("dec", counter.dec)
+                                context.startService(it)
+                            }
+                            Intent(context,AppService::class.java).also {
+                                it.action = AppService.Actions.STOP.toString()
+                                context.stopService(it)
+                            }
+
+                        },modifier = Modifier.size(70.dp)) {
+                            Icon(imageVector = Icons.Default.Clear, contentDescription = "")
                         }
                         IconButton(onClick = {onEvent(CounterEvents.Decrement(counter))},modifier = Modifier.size(70.dp)) {
                             Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "")

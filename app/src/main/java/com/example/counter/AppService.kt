@@ -79,7 +79,8 @@ class AppService:Service(){
         val notification: Notification =
             NotificationCompat.Builder(applicationContext, "running_channel")
                 .setSmallIcon(R.mipmap.ic_launcher_counter_foreground)
-                .setContentTitle("$title $id")
+                .setContentTitle("$title")
+                .setAutoCancel(true)
                 .addAction(increaseAction)
                 .addAction(R.drawable.ic_launcher_foreground,"-$dec",decreasePendingIntent)
                 .setContentText(Normalize(count))

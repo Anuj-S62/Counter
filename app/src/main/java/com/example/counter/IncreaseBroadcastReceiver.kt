@@ -73,8 +73,9 @@ class IncreaseBroadcastReceiver: BroadcastReceiver() {
         val updatedNotification: NotificationCompat.Builder =
             NotificationCompat.Builder(p0, "running_channel")
                 .setSmallIcon(R.mipmap.ic_launcher_counter_foreground)
-                .setContentTitle("$title $id")
+                .setContentTitle("$title")
                 .addAction(increaseAction)
+                .setAutoCancel(true)
                 .addAction(R.drawable.ic_launcher_foreground,"-$dec",decreasePendingIntent)
                 .setContentText(Normalize(ans))
 

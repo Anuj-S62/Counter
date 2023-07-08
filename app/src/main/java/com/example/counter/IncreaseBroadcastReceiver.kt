@@ -74,6 +74,7 @@ class IncreaseBroadcastReceiver: BroadcastReceiver() {
             NotificationCompat.Builder(p0, "running_channel")
                 .setSmallIcon(R.mipmap.ic_launcher_counter_foreground)
                 .setContentTitle("$title")
+                .setOnlyAlertOnce(true)
                 .addAction(increaseAction)
                 .setAutoCancel(true)
                 .addAction(R.drawable.ic_launcher_foreground,"-$dec",decreasePendingIntent)

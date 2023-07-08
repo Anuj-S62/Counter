@@ -82,6 +82,7 @@ class AppService:Service(){
                 .setContentTitle("$title")
                 .setAutoCancel(true)
                 .addAction(increaseAction)
+                .setOnlyAlertOnce(true)
                 .addAction(R.drawable.ic_launcher_foreground,"-$dec",decreasePendingIntent)
                 .setContentText(Normalize(count))
                 .build()

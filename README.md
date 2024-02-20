@@ -2,6 +2,9 @@
 This is counter app for android 
 In this app you can add/delete multiple counters
 
+# Get it on Google Play
+https://play.google.com/store/apps/details?id=anuj.android.counter
+
  
 Tech used in the app:
 
